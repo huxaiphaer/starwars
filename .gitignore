@@ -1,0 +1,11 @@
+star_wars_cache.sqlite
+CELERY_INCLUDEannot
+__pycache__/
+.idea/
+.idea
+.vscode
+.vscode/
+__pycache__
+.env
+migrations/
+

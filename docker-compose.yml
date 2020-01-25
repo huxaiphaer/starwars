@@ -1,0 +1,20 @@
+version: '2'
+
+services:
+  redis:
+    image: 'redis:3.0-alpine'
+    command: redis-server
+    volumes:
+      - 'redis:/data'
+    ports:
+    - '6379:6379'
+
+  celery:
+    build: .
+    command: celery worker -l info -A app.utils.tasks
+    volumes:
+      - '.:/app'
+
+volumes:
+  redis:
+
