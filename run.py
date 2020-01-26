@@ -4,13 +4,14 @@ from celery import Celery
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
+import os
 
 app = Flask(__name__)
 
 
 # Add Redis URL configurations
-app.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
-app.config["CELERY_RESULT_BACKEND"] = "redis://localhost:6379/0"
+app.config["CELERY_BROKER_URL"] = os.getenv("REDIS_CONFIG")
+app.config["CELERY_RESULT_BACKEND"] = os.getenv("REDIS_CONFIG")
 
 # Add periodic tasks
 celery_beat_schedule = {
@@ -36,7 +37,7 @@ celery.conf.update(
 # connection to redis
 
 redis_db = redis.StrictRedis(
-    host="localhost", port="6379", db=1, charset="utf-8", decode_responses=True
+    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"), charset=os.getenv("REDIS_CHAR_SET"), decode_responses=os.getenv("REDIS_DECODE_RESPONSE")
 )
 
 
@@ -82,7 +83,7 @@ def paginate_requested_data():
 
 
 # secret key
-app.secret_key = "huzaifah"
+app.secret_key = os.getenv("SECRET_KEY")
 
 api = Api(app)
 
