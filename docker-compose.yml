@@ -11,9 +11,15 @@ services:
 
   celery:
     build: .
-    command: celery worker -l info -A app.utils.tasks
+    command: celery -A run.celery worker -l info
     volumes:
       - '.:/app'
+
+  celery-beat:
+     build: .
+     command: celery -A run.celery beat -l info
+     volumes:
+       - '.:/app'
 
 volumes:
   redis:
