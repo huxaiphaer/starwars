@@ -24,6 +24,19 @@ hyperdrives sorted in an ascending order.
 git clone https://github.com/huxaiphaer/starwars.git
 ```
 
+Create a `.env` file in the root directory and add the following :
+
+```buildoutcfg
+REDIS_CONFIG=redis://redis:6379/0
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_DB=1
+REDIS_CHAR_SET=utf-8
+REDIS_DECODE_RESPONSE=True
+SECRET_KEY=anyname
+```
+
+
  Then, create a virtual environment and install in on Mac :
 
 ```buildoutcfg

@@ -27,8 +27,8 @@ celery = Celery(app.name)
 
 # configure celery
 celery.conf.update(
-    result_backend=app.config["CELERY_RESULT_BACKEND"],
-    broker_url=app.config["CELERY_BROKER_URL"],
+    # result_backend=app.config["CELERY_RESULT_BACKEND"],
+    # broker_url=app.config["CELERY_BROKER_URL"],
     timezone="UTC",
     task_serializer="json",
     accept_content=["json"],
