@@ -7,7 +7,6 @@ import os
 
 app = Flask(__name__)
 
-
 # Add Redis URL configurations
 app.config["CELERY_BROKER_URL"] = os.getenv("REDIS_CONFIG")
 app.config["CELERY_RESULT_BACKEND"] = os.getenv("REDIS_CONFIG")
@@ -17,13 +16,13 @@ celery_beat_schedule = {
     "time_scheduler": {
         "task": "run.paginate_requested_data",
         # Run every second
-        "schedule": 30.0,
+        "schedule": 300.0,
     }
 }
 
 celery = Celery(app.name)
 
-#configure celery
+# configure celery
 celery.conf.update(
     result_backend=app.config["CELERY_RESULT_BACKEND"],
     broker_url=app.config["CELERY_BROKER_URL"],
@@ -37,7 +36,8 @@ celery.conf.update(
 # connection to redis
 
 redis_db = redis.StrictRedis(
-    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"), charset=os.getenv("REDIS_CHAR_SET"), decode_responses=os.getenv("REDIS_DECODE_RESPONSE")
+    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"),
+    charset=os.getenv("REDIS_CHAR_SET"), decode_responses=os.getenv("REDIS_DECODE_RESPONSE")
 )
 
 
@@ -99,7 +99,7 @@ def get_star_ships():
     """
     Returns the json of the sorted
         data of star ships.
-    :return:
+    :return: Filtered Data
     """
 
     known_star_ships = []

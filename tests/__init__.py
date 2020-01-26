@@ -19,6 +19,7 @@ class BaseTestCase(unittest.TestCase):
 
     def setUp(self):
         self.client = app.test_client(self)
+        self.client.testing = True
 
     # def add_data(self):
     #     """
@@ -37,3 +38,5 @@ class BaseTestCase(unittest.TestCase):
 
         """
         return self.client.get('/api/v1/starwars')
+
+
