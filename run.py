@@ -3,18 +3,10 @@ import requests
 from celery import Celery
 from flask import Flask
 from flask_cors import CORS
-from flask_migrate import Migrate, MigrateCommand
 from flask_restful import Api
-from flask_script import Manager
-from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-manager = Manager(app)
-manager.add_command('db', MigrateCommand)
 
 # Add Redis URL configurations
 app.config["CELERY_BROKER_URL"] = "redis://localhost:6379/0"
@@ -135,5 +127,4 @@ def get_star_ships():
 
 
 if __name__ == '__main__':
-    manager.run()
-    # app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
