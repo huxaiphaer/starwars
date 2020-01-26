@@ -5,11 +5,14 @@ from flask import Flask
 from flask_cors import CORS
 import os
 
+from config.config import app_config
+
 app = Flask(__name__)
 
 # Add Redis URL configurations
 app.config["CELERY_BROKER_URL"] = os.getenv("REDIS_CONFIG")
 app.config["CELERY_RESULT_BACKEND"] = os.getenv("REDIS_CONFIG")
+app.config.from_object(app_config["development"])
 
 # Add periodic tasks
 celery_beat_schedule = {
@@ -77,6 +80,7 @@ def paginate_requested_data():
             data = r.json()
             for i in data['results']:
                 insert_data(str(i['name']), str(i['hyperdrive_rating']))
+            return {"success": " Done insertion"}
         except KeyError as k:
             print(k)
             return {'error': 'An error has occurred during this operation. {}'.format(k)}
@@ -126,4 +130,4 @@ def get_star_ships():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=app_config["development"].DEBUG)

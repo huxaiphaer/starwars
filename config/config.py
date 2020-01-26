@@ -22,19 +22,10 @@ class DevelopmentConfig(BaseConfig):
     Development configurations
     """
 
-    DEBUG = True
-
-
-class ProductionConfig(BaseConfig):
-    """
-    Production configurations
-    """
-
     DEBUG = False
 
 
 app_config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
-    'production': ProductionConfig
 }
