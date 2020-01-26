@@ -3,7 +3,6 @@ import requests
 from celery import Celery
 from flask import Flask
 from flask_cors import CORS
-from flask_restful import Api
 import os
 
 app = Flask(__name__)
@@ -24,6 +23,7 @@ celery_beat_schedule = {
 
 celery = Celery(app.name)
 
+#configure celery
 celery.conf.update(
     result_backend=app.config["CELERY_RESULT_BACKEND"],
     broker_url=app.config["CELERY_BROKER_URL"],
@@ -55,7 +55,7 @@ def insert_data(name, hyper_drive_rating):
 def paginate_requested_data():
     """
     This is a function for
-    requesting data from an external api.
+    requesting data from an external api with pagination
     :return: None
     """
 
@@ -84,8 +84,6 @@ def paginate_requested_data():
 
 # secret key
 app.secret_key = os.getenv("SECRET_KEY")
-
-api = Api(app)
 
 # Cross Origin Resource Sharing
 CORS(app)
