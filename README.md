@@ -58,6 +58,8 @@ Run docker :
 docker-compose up --build
 ```
 
+After, the above command finishes and it starts `celery` beats, then route to `http://localhost:5000/api/v1/starwars`
+
 Viola , then we can see our application routing to the api endpoint :-)
 
 
