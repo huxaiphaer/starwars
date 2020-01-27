@@ -42,8 +42,8 @@ celery.conf.update(
 # connection to redis
 
 redis_db = redis.StrictRedis(
-    host='redis', port='6379', db='1',
-    charset='utf-8', decode_responses=True
+    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"),
+    charset=os.getenv("REDIS_CHAR_SET"), decode_responses=True
     )
 
 
