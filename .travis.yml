@@ -11,8 +11,7 @@ install:
 
 # command to run tests
 script:
-  - pytest --cov=app/
-  - coveralls
+  - nosetests
 
 after_success:
   bash <(curl -s https://codecov.io/bash)

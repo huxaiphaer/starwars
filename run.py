@@ -60,7 +60,7 @@ def insert_data(db, name, hyper_drive_rating):
 
 
 @celery.task
-def paginate_requested_data(url_link, db):
+def paginate_requested_data(url_link):
     """
         This is a function for
         requesting data from an external api with pagination
@@ -77,7 +77,7 @@ def paginate_requested_data(url_link, db):
     data = r.json()
 
     for i in data['results']:
-        insert_data(db, str(i['name']), str(i['hyperdrive_rating']))
+        insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
 
     while r.status_code == 200:
         try:
@@ -86,7 +86,7 @@ def paginate_requested_data(url_link, db):
             r = requests.get(url, params=params)
             data = r.json()
             for i in data['results']:
-                insert_data(db, str(i['name']), str(i['hyperdrive_rating']))
+                insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
             return {"success": " Done insertion"}, 200
         except KeyError as k:
             print(k)
@@ -120,7 +120,7 @@ def get_star_ships():
     unknown_star_ships = []
 
     # call celery task
-    paginate_requested_data.delay("https://swapi.co/api/starships/", *redis_db)
+    paginate_requested_data.delay("https://swapi.co/api/starships/")
     res = redis_db.hgetall('mydata')
 
     for k, v in res.items():
