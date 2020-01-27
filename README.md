@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/huxaiphaer/starwars.svg?branch=master)](https://travis-ci.org/huxaiphaer/starwars)
-[![codecov](https://codecov.io/gh/huxaiphaer/starwars/branch/master/graph/badge.svg)](https://codecov.io/gh/huxaiphaer/starwars)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/22e26a274eab9a89c213/test_coverage)](https://codeclimate.com/github/huxaiphaer/starwars/test_coverage)
 
 # Star Wars Challenge 
 

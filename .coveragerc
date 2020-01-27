@@ -41,3 +41,4 @@ omit =
       *pathlib.py*
       *socketserver.py*
       *netrc.py*
+      *config*
