@@ -7,13 +7,16 @@ This is an application which lists down star wars and their respective
 hyperdrives sorted in an ascending order.
 
 
-### Requirements.
-1. Python3
+### Requirements for setting up the project.
+1. Python3. 
 2. Flask
-3. Virtualenv
-4. Redis
-5. Celery
-6. Docker
+3. Virtualenv. 
+4. Redis. 
+You need to install redis on your machine, then afterwards you activate it.
+This is the command you run on mac ``` brew services start redis```
+5. Celery. This is also needed to perform some background processes, for this project, 
+celery is already in the `requirements.txt` file.
+6. Docker. For easy deployment, you have to download `Docker` for containerizing our application.
 
 
 ### Installation on Mac
@@ -49,25 +52,28 @@ source venv/bin/activate
 ```buildoutcfg
 pip3 install -r requirements.txt
 ```
- Then build your docker :
 
+Run docker :
 ```buildoutcfg
-docker build -t doc-flask:v1
-```
-
-when the building is successful, then run the container :
-
-```buildoutcfg
-docker run -p 5000:5000 doc-flask:v1
-```
-Then finally, route to this endpoint 
-
-```buildoutcfg
-http://localhost:5000/api/v1/starwars
+docker-compose up --build
 ```
 
 Viola , then we can see our application routing to the api endpoint :-)
 
+
+### Running Tests
+
+Running tests of the project :
+
+```buildoutcfg
+nosetests
+```
+
+Running tests with coverage :
+
+```buildoutcfg
+nosetests --with-coverage
+```
 
 
 ### Contributors 
