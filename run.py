@@ -48,6 +48,7 @@ redis_db = redis.StrictRedis(
 
 def insert_data(db, name, hyper_drive_rating):
     """
+    :param db:
     :param name:
     :param hyper_drive_rating:
     :return: None
@@ -59,22 +60,24 @@ def insert_data(db, name, hyper_drive_rating):
 
 
 @celery.task
-def paginate_requested_data():
+def paginate_requested_data(url_link, db):
     """
-    This is a function for
-    requesting data from an external api with pagination
-    :return: None
-    """
+        This is a function for
+        requesting data from an external api with pagination
+        :param url_link:
+        :param db:
+        :return: None
+        """
 
     pagination = 1
-    url = 'https://swapi.co/api/starships/'
+    url = url_link
     params = {'page': pagination}
     r = requests.get(url, params=params)
 
     data = r.json()
 
     for i in data['results']:
-        insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
+        insert_data(db, str(i['name']), str(i['hyperdrive_rating']))
 
     while r.status_code == 200:
         try:
@@ -83,7 +86,7 @@ def paginate_requested_data():
             r = requests.get(url, params=params)
             data = r.json()
             for i in data['results']:
-                insert_data(str(i['name']), str(i['hyperdrive_rating']))
+                insert_data(db, str(i['name']), str(i['hyperdrive_rating']))
             return {"success": " Done insertion"}, 200
         except KeyError as k:
             print(k)
@@ -99,6 +102,9 @@ CORS(app)
 
 @app.route('/', methods=['GET'])
 def index():
+    """
+    Default Routing of the application.
+    """
     return 'Welcome to Star Wars End point. Test the endpoints in postman'
 
 
@@ -112,7 +118,8 @@ def get_star_ships():
 
     known_star_ships = []
     unknown_star_ships = []
-    paginate_requested_data.delay()
+
+    paginate_requested_data.delay("https://swapi.co/api/starships/", redis_db)
     res = redis_db.hgetall('mydata')
 
     for k, v in res.items():

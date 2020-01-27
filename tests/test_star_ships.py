@@ -1,6 +1,3 @@
-import mockredis as mockredis
-from requests import patch
-
 from tests import BaseTestCase
 
 
