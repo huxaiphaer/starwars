@@ -9,18 +9,6 @@ services:
     ports:
     - '6379:6379'
 
-  celery:
-    build: .
-    command: celery -A run.celery worker -l info
-    volumes:
-      - '.:/app'
-
-  celery-beat:
-     build: .
-     command: celery -A run.celery beat -l info
-     volumes:
-       - '.:/app'
-
 volumes:
   redis:
 

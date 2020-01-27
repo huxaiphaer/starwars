@@ -14,5 +14,5 @@ EXPOSE 5000
 
 # Run run.py when the container launches
 COPY run.py /app
-CMD python3 run.py
+CMD ["bash", "entrypoint.sh"]
 

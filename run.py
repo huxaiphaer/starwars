@@ -23,18 +23,19 @@ celery_beat_schedule = {
     }
 }
 
-celery = Celery(app.name)
-
 # configure celery
+
+celery = Celery(app.name)
 celery.conf.update(
-    # result_backend=app.config["CELERY_RESULT_BACKEND"],
-    # broker_url=app.config["CELERY_BROKER_URL"],
+    result_backend=app.config["CELERY_RESULT_BACKEND"],
+    broker_url=app.config["CELERY_BROKER_URL"],
     timezone="UTC",
     task_serializer="json",
     accept_content=["json"],
     result_serializer="json",
     beat_schedule=celery_beat_schedule,
 )
+
 
 # connection to redis
 
