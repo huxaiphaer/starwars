@@ -38,23 +38,24 @@ celery.conf.update(
     beat_schedule=celery_beat_schedule,
 )
 
-
 # connection to redis
 
 redis_db = redis.StrictRedis(
     host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"),
     charset=os.getenv("REDIS_CHAR_SET"), decode_responses=True
-    )
+)
 
 
-def insert_data(name, hyper_drive_rating):
+def insert_data(db, name, hyper_drive_rating):
     """
     :param name:
     :param hyper_drive_rating:
     :return: None
     """
 
-    redis_db.hset('mydata', name, hyper_drive_rating)
+    db.hset('mydata', name, hyper_drive_rating)
+
+    return {"data": "data inserted successfully"}, 200
 
 
 @celery.task
@@ -73,7 +74,7 @@ def paginate_requested_data():
     data = r.json()
 
     for i in data['results']:
-        insert_data(str(i['name']), str(i['hyperdrive_rating']))
+        insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
 
     while r.status_code == 200:
         try:
@@ -83,10 +84,10 @@ def paginate_requested_data():
             data = r.json()
             for i in data['results']:
                 insert_data(str(i['name']), str(i['hyperdrive_rating']))
-            return {"success": " Done insertion"}
+            return {"success": " Done insertion"}, 200
         except KeyError as k:
             print(k)
-            return {'error': 'An error has occurred during this operation. {}'.format(k)}
+            return {'error': 'An error has occurred during this operation. {}'.format(k)}, 500
 
 
 # secret key
