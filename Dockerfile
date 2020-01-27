@@ -1,18 +1,18 @@
-FROM python:3.7.4
+FROM python:3.7
 
-MAINTAINER Lutaaya Huzaifah Idris
+RUN mkdir app
 
-ADD . /app
+COPY . /app/
 
 WORKDIR /app
 
-COPY . /app
+RUN chmod +x entrypoint.sh
 
-RUN pip3 --no-cache-dir install -r requirements.txt
+# Install the Python libraries
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 
-# Run run.py when the container launches
-COPY run.py /app
+#CMD ["./entrypoint.sh"]
 CMD ["bash", "entrypoint.sh"]
 

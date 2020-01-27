@@ -4,11 +4,13 @@ from celery import Celery
 from flask import Flask
 from flask_cors import CORS
 import os
+from dotenv import load_dotenv
 
 from config.config import app_config
 
 app = Flask(__name__)
 
+load_dotenv()
 # Add Redis URL configurations
 app.config["CELERY_BROKER_URL"] = os.getenv("REDIS_CONFIG")
 app.config["CELERY_RESULT_BACKEND"] = os.getenv("REDIS_CONFIG")
@@ -40,9 +42,9 @@ celery.conf.update(
 # connection to redis
 
 redis_db = redis.StrictRedis(
-    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"),
-    charset=os.getenv("REDIS_CHAR_SET"), decode_responses=os.getenv("REDIS_DECODE_RESPONSE")
-)
+    host='redis', port='6379', db='1',
+    charset='utf-8', decode_responses=True
+    )
 
 
 def insert_data(name, hyper_drive_rating):
