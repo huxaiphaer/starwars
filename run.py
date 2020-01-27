@@ -120,7 +120,7 @@ def get_star_ships():
     unknown_star_ships = []
 
     # call celery task
-    paginate_requested_data.delay("https://swapi.co/api/starships/", redis_db)
+    paginate_requested_data.delay("https://swapi.co/api/starships/", *redis_db)
     res = redis_db.hgetall('mydata')
 
     for k, v in res.items():

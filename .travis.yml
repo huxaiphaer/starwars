@@ -7,10 +7,12 @@ services:
 
 install:
   - pip install -r requirements.txt
+  - pip install pytest pytest-cov
 
 # command to run tests
 script:
-  - nosetests --with-coverage
+  - pytest --cov=app/
+  - coveralls
 
 after_success:
   bash <(curl -s https://codecov.io/bash)
