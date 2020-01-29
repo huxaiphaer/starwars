@@ -1,14 +1,14 @@
-import redis
 import requests
 from celery import Celery
-from flask import Flask
 from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 
+from config import create_app
 from config.config import app_config
+from config.redis_db import redis_db
 
-app = Flask(__name__)
+app = create_app('development')
 
 load_dotenv()
 # Add Redis URL configurations
@@ -38,13 +38,6 @@ celery.conf.update(
     beat_schedule=celery_beat_schedule,
 )
 
-# connection to redis
-
-redis_db = redis.StrictRedis(
-    host=os.getenv("REDIS_HOST"), port=os.getenv("REDIS_PORT"), db=os.getenv("REDIS_DB"),
-    charset=os.getenv("REDIS_CHAR_SET"), decode_responses=True
-)
-
 
 def insert_data(db, name, hyper_drive_rating):
     """
@@ -59,16 +52,14 @@ def insert_data(db, name, hyper_drive_rating):
     return {"data": "data inserted successfully"}, 200
 
 
-@celery.task
-def paginate_requested_data(url_link):
+def make_request(url_link, db):
     """
-        This is a function for
-        requesting data from an external api with pagination
-        :param url_link:
-        :param db:
-        :return: None
-        """
-
+    Make request to the url and
+    paginate
+    @param url_link:
+    @param db:
+    @return: None
+    """
     pagination = 1
     url = url_link
     params = {'page': pagination}
@@ -77,7 +68,7 @@ def paginate_requested_data(url_link):
     data = r.json()
 
     for i in data['results']:
-        insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
+        db.hset('mydata', str(i['name']), str(i['hyperdrive_rating']))
 
     while r.status_code == 200:
         try:
@@ -86,11 +77,21 @@ def paginate_requested_data(url_link):
             r = requests.get(url, params=params)
             data = r.json()
             for i in data['results']:
-                insert_data(redis_db, str(i['name']), str(i['hyperdrive_rating']))
+                db.hset('mydata', str(i['name']), str(i['hyperdrive_rating']))
             return {"success": " Done insertion"}, 200
         except KeyError as k:
             print(k)
             return {'error': 'An error has occurred during this operation. {}'.format(k)}, 500
+
+
+@celery.task
+def paginate_requested_data(url_link):
+    """
+    get paginated data
+    @param url_link:
+    @return: None
+    """
+    make_request(url_link, redis_db)
 
 
 # secret key
