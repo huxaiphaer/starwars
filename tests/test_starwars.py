@@ -28,17 +28,13 @@ class TestStar(unittest.TestCase):
         self.assertIsNotNone(res)
 
     def test_default_route(self):
-
-        res = self.client.post('/')
+        res = self.client.get('/')
         self.assertIsNotNone(res)
 
     def test_paginated_data(self):
-
         res = make_request('https://swapi.co/api/starships/', self.fake_redis_db)
         self.assertIsNotNone(res)
 
     def test_get_starwars_endpoint(self):
-
-        res = self.client.post('/api/v1/starwars')
+        res = self.client.get('/api/v1/starwars', content_type='application/text')
         self.assertIsNotNone(res)
-
