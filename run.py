@@ -68,7 +68,7 @@ def make_request(url_link, db):
     data = r.json()
 
     for i in data['results']:
-        db.hset('mydata', str(i['name']), str(i['hyperdrive_rating']))
+        insert_data(db,str(i['name']), str(i['hyperdrive_rating']))
 
     while r.status_code == 200:
         try:
@@ -77,7 +77,7 @@ def make_request(url_link, db):
             r = requests.get(url, params=params)
             data = r.json()
             for i in data['results']:
-                db.hset('mydata', str(i['name']), str(i['hyperdrive_rating']))
+                insert_data(db, str(i['name']), str(i['hyperdrive_rating']))
             return {"success": " Done insertion"}, 200
         except KeyError as k:
             print(k)
