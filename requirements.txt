@@ -16,7 +16,7 @@ coverage==5.0.3
 fakeredis==1.1.0
 Flask==1.1.1
 Flask-Bcrypt==0.7.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-Migrate==1.8.0
 Flask-RESTful==0.3.7
 Flask-Script==2.0.6
